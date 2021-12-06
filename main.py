@@ -18,9 +18,14 @@ import json
 import pickle
 import time
 
+# import the necessary libraries for discord support
 import discord
 from dotenv import load_dotenv
 
+# import the necessary libraries for DNN visualization
+# from tensorflow.keras.utils import plot_model
+# import pydot
+# import graphviz
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -98,25 +103,25 @@ except:
 print("Bot is loading...")
 time.sleep(3)
 
-# reset underlying data graph
-tf.reset_default_graph()
-net = tflearn.input_data(shape=[None, len(training[0])])
-# add hidden neural layer of 8 neurons
-net = tflearn.fully_connected(net, 8)
-net = tflearn.fully_connected(net, 8)
-# use sofmax function (normalized exponential function) for our activation function in the output layer of neural network model
-net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
-net = tflearn.regression(net)
-
-model = tflearn.DNN(net)
-
 # try to load the preexisting model
 try:
     model.load("Ayano_Chatbot_model.tflearn")
 except:
-    model = tflearn.DNN(net)
-    model.fit(training, output, n_epoch = 1000, batch_size = 8, show_metric = True)
+    # reset underlying data graph
+    tf.reset_default_graph()
+    net = tflearn.input_data(shape=[None, len(training[0])])
+    # add hidden neural layer of 8 neurons
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, 8)
+    # use sofmax function (normalized exponential function) for our activation function in the output layer of neural network model
+    net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+    net = tflearn.regression(net)
+
+    model = tflearn.DNN(net, tensorboard_verbose = 3)
+    model.fit(training, output, n_epoch = 5000, batch_size = 8, show_metric = True, run_id = 'LOG_AYANO')
     model.save("Ayano_Chatbot_model.tflearn")
+
+print("Bot is now loaded!")
 
 def bag_of_words(sentence, words):
     # initialize list full of 0 for number of words given
@@ -174,9 +179,14 @@ def chat_with_bot_discord(message):
 
         # print out one of possible responses in given tag randomly    
         final_answer = random.choice(responses)
+
     else:
         final_answer = "Hehe... I'm not smart after all, I don't quite understand. Sorry."
-    
+
+    # for debugging purposes only
+    # converted_res = [str(elem) for elem in res]
+    # final_answer = ", ".join(converted_res)    
+
     return final_answer
 
 client = discord.Client()
