@@ -18,6 +18,9 @@ import json
 import pickle
 import time
 
+import discord
+from dotenv import load_dotenv
+
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -92,6 +95,9 @@ except:
 # print(training)
 # print(output)
 
+print("Bot is loading...")
+time.sleep(3)
+
 # reset underlying data graph
 tf.reset_default_graph()
 net = tflearn.input_data(shape=[None, len(training[0])])
@@ -128,32 +134,71 @@ def bag_of_words(sentence, words):
             
     return np.array(bag)
 
-def chat_with_bot():
-    # clear screen before initiating the bot
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-    print("Bot is loading...")
-    time.sleep(3)
-    print("Bot is ready!")
-    print("")
-
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() == "quit":
-            break
+# def chat_with_bot():
+#     while True:
+#         user_input = input("You: ")
+#         if user_input.lower() == "quit":
+#             break
         
-        # calculate the probability of each possible tags
-        res = model.predict([bag_of_words(user_input, words)])
-        # find the correct tag based on the probability
-        res_index = np.argmax(res)
-        tag = labels[res_index]
-        #using json file, print out suitable response
+#         # calculate the probability of each possible tags
+#         res = model.predict([bag_of_words(user_input, words)])[0]
+#         # find the correct tag based on the probability
+#         res_index = np.argmax(res)
+#         tag = labels[res_index]
+
+#         # set minimum confidence level
+#         if res[res_index] > 0.7:
+#             # using json file, print out suitable response
+#             for t in data["intents"]:
+#                 if t['tag'] == tag:
+#                     responses = t['responses']
+
+#             # print out one of possible responses in given tag randomly    
+#             print(random.choice(responses))
+#         else:
+#             print("Hehe... I'm not smart after all, I don't quite understand. Sorry.")
+
+def chat_with_bot_discord(message):
+    # calculate the probability of each possible tags
+    res = model.predict([bag_of_words(message, words)])[0]
+    # find the correct tag based on the probability
+    res_index = np.argmax(res)
+    tag = labels[res_index]
+
+    # set minimum confidence level
+    if res[res_index] > 0.7:
+        # using json file, print out suitable response
         for t in data["intents"]:
             if t['tag'] == tag:
                 responses = t['responses']
 
         # print out one of possible responses in given tag randomly    
-        print(random.choice(responses))
-        
+        final_answer = random.choice(responses)
+    else:
+        final_answer = "Hehe... I'm not smart after all, I don't quite understand. Sorry."
+    
+    return final_answer
 
-chat_with_bot()
+client = discord.Client()
+
+load_dotenv()
+TOKEN = os.getenv('TOKEN')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.content.startswith("$ayanobot"):
+        response = chat_with_bot_discord(message.content[10:])
+        await message.channel.send(response)
+
+client.run(TOKEN)
+
+
+# # clear screen before initiating the bot
+# os.system('cls' if os.name == 'nt' else 'clear')
+
+# print("Bot is ready!")
+# print("")
+
+# chat_with_bot()
