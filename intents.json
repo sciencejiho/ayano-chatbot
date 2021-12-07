@@ -3,7 +3,7 @@
         {
             "tag": "greeting", 
             "patterns": ["Hi", "Hello", "How are you", "Is anyone there?", "Good day", "Whats up"],
-            "responses": ["Hello!", "Hey, good to see you again!", "You are back!", "It's been a long time.", "I missed you!"],
+            "responses": ["Hello!", "Hey, good to see you again!", "You are back!", "It's been a long time.", "I missed you!", "Hey, it's been a while."],
             "context_set": ""
         },
         {
@@ -21,11 +21,11 @@
         {
             "tag": "name", 
             "patterns": ["What is your name", "What should I call you", "Whats your name?", "Name?", "Who are you?"],
-            "responses": ["I am Ayano!", "I'm Ayano!"],
+            "responses": ["I am Ayano!", "I'm Ayano!", "I... My name is Ayano!"],
             "context_set": ""
         },
         {
-            "tag": "bot", 
+            "tag": "identity", 
             "patterns": ["Are you real?", "Are you a human or a bot?", "Are you a robot?"],
             "responses": ["I am Ayano-bot, an artificial intelligence created by my creator, <@280064127312068618>."],
             "context_set": ""
@@ -51,7 +51,7 @@
         {
             "tag": "intelligencecompliment", 
             "patterns": ["You are smart", "You are so intelligent", "How surprisingly knowledgable you are!", "Very clever", "You are extremely perceptive"],
-            "responses": [":brain:", ":blush:"],
+            "responses": [":brain:", ":blush:", ":woman_student"],
             "context_set": ""
         }
     ]
