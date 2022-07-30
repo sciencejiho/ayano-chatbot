@@ -8,6 +8,8 @@ import nltk
 # import stemmers to remove morphological affixes from words, leaving only the word stem
 from nltk.stem.lancaster import LancasterStemmer
 
+nltk.download('punkt')
+
 stemmer = LancasterStemmer()
 
 import numpy as np
@@ -26,6 +28,8 @@ from dotenv import load_dotenv
 # from tensorflow.keras.utils import plot_model
 # import pydot
 # import graphviz
+
+from keep_alive import keep_alive
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -108,7 +112,7 @@ try:
     model.load("Ayano_Chatbot_model.tflearn")
 except:
     # reset underlying data graph
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     net = tflearn.input_data(shape=[None, len(training[0])])
     # add hidden neural layer of 8 neurons
     net = tflearn.fully_connected(net, 8)
@@ -192,7 +196,8 @@ def chat_with_bot_discord(message):
 client = discord.Client()
 
 load_dotenv()
-TOKEN = os.getenv('TOKEN')
+keep_alive()
+TOKEN = os.environ['AYANO_BOT_TOKEN']
 
 @client.event
 async def on_message(message):
