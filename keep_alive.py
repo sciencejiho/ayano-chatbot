@@ -12,4 +12,8 @@ def run():
 
 def keep_alive():
     t = Thread(target=run)
+<<<<<<< HEAD
     t.start()
+=======
+    t.start()
+>>>>>>> origin/master
