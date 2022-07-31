@@ -1,2 +1,2 @@
-model_checkpoint_path: "/home/runner/ayano-chatbot/Ayano_Chatbot_model.tflearn"
-all_model_checkpoint_paths: "/home/runner/ayano-chatbot/Ayano_Chatbot_model.tflearn"
+model_checkpoint_path: "/root/ayano-bot-temp/Ayano_Chatbot_model.tflearn"
+all_model_checkpoint_paths: "/root/ayano-bot-temp/Ayano_Chatbot_model.tflearn"

@@ -5,10 +5,10 @@ import os
 
 # import NLTK, which is a Natural Language Tool Kit for building Pyhon programs to work with human language data.
 import nltk
+nltk.download('punkt')
+
 # import stemmers to remove morphological affixes from words, leaving only the word stem
 from nltk.stem.lancaster import LancasterStemmer
-
-nltk.download('punkt')
 
 stemmer = LancasterStemmer()
 
@@ -28,8 +28,6 @@ from dotenv import load_dotenv
 # from tensorflow.keras.utils import plot_model
 # import pydot
 # import graphviz
-
-from keep_alive import keep_alive
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -122,7 +120,7 @@ except:
     net = tflearn.regression(net)
 
     model = tflearn.DNN(net, tensorboard_verbose = 3)
-    model.fit(training, output, n_epoch = 5000, batch_size = 8, show_metric = True, run_id = 'LOG_AYANO')
+    model.fit(training, output, n_epoch = 100, batch_size = 32, show_metric = True, run_id = 'LOG_AYANO')
     model.save("Ayano_Chatbot_model.tflearn")
 
 print("Bot is now loaded!")
@@ -196,8 +194,7 @@ def chat_with_bot_discord(message):
 client = discord.Client()
 
 load_dotenv()
-keep_alive()
-TOKEN = os.environ['AYANO_BOT_TOKEN']
+TOKEN = os.getenv('AYANO_BOT_TOKEN')
 
 @client.event
 async def on_message(message):
