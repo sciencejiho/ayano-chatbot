@@ -22,14 +22,17 @@ import time
 
 # import the necessary libraries for discord support
 import discord
+
 from dotenv import load_dotenv
+load_dotenv()
 
 # import the necessary libraries for DNN visualization
 # from tensorflow.keras.utils import plot_model
 # import pydot
 # import graphviz
 
-with open("intents.json") as file:
+PATH = os.getenv('PATH_TO_DATA')
+with open(PATH) as file:
     data = json.load(file)
 
 # print(data)
@@ -120,7 +123,7 @@ except:
     net = tflearn.regression(net)
 
     model = tflearn.DNN(net, tensorboard_verbose = 3)
-    model.fit(training, output, n_epoch = 100, batch_size = 32, show_metric = True, run_id = 'LOG_AYANO')
+    model.fit(training, output, n_epoch = 500, batch_size = 32, show_metric = True, run_id = 'LOG_AYANO')
     model.save("Ayano_Chatbot_model.tflearn")
 
 print("Bot is now loaded!")
